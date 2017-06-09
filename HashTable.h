@@ -50,4 +50,6 @@ class HashTable {
     private:
         Node** table;
         int size;
+        
+        int hash(int id);
 };

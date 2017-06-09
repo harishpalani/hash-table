@@ -10,7 +10,7 @@ HashTable::HashTable() {
 HashTable::~HashTable() { }
 
 Student* HashTable::find(int id) {
-    Node* current = table[id % size];
+    Node* current = table[hash(id)];
     while (true) {
         if (current == 0) { return 0; }
         else if (current->data->id == id) {
@@ -22,16 +22,20 @@ Student* HashTable::find(int id) {
 }
 
 void HashTable::add(char* firstName, char* lastName, int id, float gpa) {
-    Node** current = &table[id % size];
+    Node** current = &table[hash(id)];
     int count = 0;
     
-    // Count elements in hash table
+    // Count collisions in chaining
     while (*current != 0) {
         current = &(*current)->next;
         count++;
     }
     
-    // If >= 3 elements in table...
+    /* If >= 3 collisions when you are chaining (or the table is more than half 
+    full using other techniques), create a table to have double the number of slots, 
+    then rehash your students into the new table. (Your hash should alter based on the 
+    size of the table, by the way, and it should spread out the data as you resize the 
+    table.  Make it so.) */ 
     if (count >= 3) {
         size *= 2;
         Node** old = table;
@@ -60,7 +64,7 @@ void HashTable::add(Student* student) {
 }
 
 bool HashTable::remove(int id) {
-    Node** current = &table[id % size];
+    Node** current = &table[hash(id)];
     while (*current != 0) {
         if ((*current)->data->id == id) {
             Node* temp = *current;
@@ -84,3 +88,6 @@ void HashTable::print() {
         }
     }
 }
+
+// Helper functions
+int HashTable::hash(int id) { return (id % size); }
