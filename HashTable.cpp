@@ -26,7 +26,19 @@ void HashTable::add(char* firstName, char* lastName, int id, float gpa) {
 }
 
 bool HashTable::remove(int id) {
-    
+    Node** current = &table[id % size];
+    while (*current != 0) {
+        if ((*current)->data->id == id) {
+            Node* temp = *current;
+            *current = (*current)->next;
+            delete temp->data;
+            delete temp;
+            return true
+        } else {
+            current = &((*current)->next);
+        }
+    }
+    return false;
 }
 
 void HashTable::print() {
