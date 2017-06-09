@@ -28,9 +28,24 @@ struct Student {
 };
 
 struct Node {
+    Student* data;
+    Node* next;
     
+    Node(Student* data) : data(data), next(0) {} // Constructing w/ initialization list
+    ~Node() {}
 };
 
 class HashTable {
-    
+    public:
+        HashTable();
+        ~HashTable();
+        
+        Student* find(int id);
+        void add(char* firstName, char* lastName, int id, float gpa);
+        bool remove(int id);
+        void print();
+        
+    private:
+        Node** table;
+        int size;
 };
