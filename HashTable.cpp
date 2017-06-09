@@ -7,7 +7,7 @@ HashTable::HashTable() {
     table = new Node*[100];
 }
 
-HashTable::HashTable() { }
+HashTable::~HashTable() { }
 
 Student* HashTable::find(int id) {
     Node* current = table[id % size];
@@ -34,14 +34,17 @@ void HashTable::add(char* firstName, char* lastName, int id, float gpa) {
     // If >= 3 elements in table...
     if (count >= 3) {
         size *= 2;
-        Node** old = list;
-        list = new Node*[size];
+        Node** old = table;
+        table = new Node*[size];
         
         for (int i = 0; i < size / 2; i++) {
-            add(current->data);
-            Node* temp = current;
-            current = current->next;
-            delete temp;
+            Node* current = old[i];
+            while (current) {
+                add(current->data);
+                Node* temp = current;
+                current = current->next;
+                delete temp;
+            }
         }
         
         delete[] old;
@@ -49,6 +52,11 @@ void HashTable::add(char* firstName, char* lastName, int id, float gpa) {
     } else {
         *current = new Node(new Student(firstName, lastName, id, gpa));
     }
+}
+
+void HashTable::add(Student* student) {
+    add(student->firstName, student->lastName, student->id, student->gpa);
+    delete student;
 }
 
 bool HashTable::remove(int id) {
@@ -59,7 +67,7 @@ bool HashTable::remove(int id) {
             *current = (*current)->next;
             delete temp->data;
             delete temp;
-            return true
+            return true;
         } else {
             current = &((*current)->next);
         }
@@ -69,7 +77,7 @@ bool HashTable::remove(int id) {
 
 void HashTable::print() {
     for (int i = 0; i < size; i++) {
-        Node* current = list[i];
+        Node* current = table[i];
         while (current != 0) {
             current->data->info();
             current = current->next;

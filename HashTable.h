@@ -1,4 +1,5 @@
 #include <cstring>
+#include <iomanip>
 #include <iostream>
 
 using namespace std;
@@ -22,7 +23,7 @@ struct Student {
     }
     
     void info() {
-        cout << lastName << ", " << firstName << " / " << "ID: " << id << " / " << "GPA: " << gpa;
+        cout << lastName << ", " << firstName << " / " << "ID: " << id << " / " << "GPA: ";
         cout << setprecision(2) << fixed << gpa << endl;
     }
 };
@@ -42,6 +43,7 @@ class HashTable {
         
         Student* find(int id);
         void add(char* firstName, char* lastName, int id, float gpa);
+        void add(Student* student);
         bool remove(int id);
         void print();
         
