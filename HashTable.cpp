@@ -25,11 +25,14 @@ void HashTable::add(char* firstName, char* lastName, int id, float gpa) {
     Node** current = &table[hash(id)];
     int count = 0;
     
+    cout << "hash id: " << hash(id) << endl;
+    
     // Count collisions in chaining
     while (*current != 0) {
         current = &(*current)->next;
         count++;
     }
+    
     
     /* If >= 3 collisions when you are chaining (or the table is more than half 
     full using other techniques), create a table to have double the number of slots, 
@@ -41,13 +44,14 @@ void HashTable::add(char* firstName, char* lastName, int id, float gpa) {
         Node** old = table;
         table = new Node*[size];
         
-        for (int i = 0; i < size / 2; i++) {
-            Node* current = old[i];
-            while (current) {
-                add(current->data);
-                Node* temp = current;
-                current = current->next;
-                delete temp;
+        for (int i = 0; i < (size / 2); i++) {
+            Node* node = old[i];
+            while (node != NULL) {
+                // TO-DO: Fix segfault that occurs when trying to add the 2nd element in the LLL
+                add(node->data);
+                // Node* temp = node;
+                node = node->next;
+                // delete temp;
             }
         }
         
@@ -90,4 +94,10 @@ void HashTable::print() {
 }
 
 // Helper functions
-int HashTable::hash(int id) { return (id % size); }
+// int HashTable::hash(int id) { return (id % size); }
+int HashTable::hash(int id) { // credit: new hash function implemented with assistance from Stack Overflow
+    id = ((id >> 16) ^ id) * 0x45d9f3b;
+    id = ((id >> 16) ^ id) * 0x45d9f3b;
+    id = (id >> 16) ^ id;
+    return id % size;
+}

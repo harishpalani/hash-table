@@ -1,6 +1,6 @@
 #include "Generator.h"
 
-Generator::Generator(const char* firstNameFile, const char* lastNameFile) : id(100000) {
+Generator::Generator(const char* firstNameFile, const char* lastNameFile) : id(100001) {
     srand(time(0));
     ifstream streamfirstNames, streamlastNames;
     streamfirstNames.open(firstNameFile);
